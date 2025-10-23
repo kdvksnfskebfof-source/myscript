@@ -1,0 +1,29 @@
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+
+local AutoTreasure = true
+local GodMode = true
+
+-- ฟังก์ชัน God Mode
+RunService.RenderStepped:Connect(function()
+    if GodMode and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+        LocalPlayer.Character.Humanoid.Health = LocalPlayer.Character.Humanoid.MaxHealth
+    end
+end)
+
+-- ฟังก์ชันออโต้หาเพชรในหีบ
+RunService.RenderStepped:Connect(function()
+    if AutoTreasure and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        local hrp = LocalPlayer.Character.HumanoidRootPart
+        for _, chest in pairs(workspace:GetDescendants()) do
+            if chest.Name == "TreasureChest" and chest:IsA("Model") then
+                -- ตรวจว่าหีบมีเพชร
+                if chest:FindFirstChild("Gem") then
+                    -- วาปไปตำแหน่งหีบ
+                    hrp.CFrame = chest:GetPrimaryPartCFrame()
+                end
+            end
+        end
+    end
+end)
